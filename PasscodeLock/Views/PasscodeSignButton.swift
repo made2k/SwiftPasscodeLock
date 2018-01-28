@@ -29,6 +29,12 @@ open class PasscodeSignButton: UIButton {
             setupView()
         }
     }
+  
+  open override var bounds: CGRect {
+    didSet {
+      layer.cornerRadius = bounds.height / 2
+    }
+  }
     
     public override init(frame: CGRect) {
         
