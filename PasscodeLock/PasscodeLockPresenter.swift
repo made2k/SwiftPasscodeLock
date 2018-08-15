@@ -49,6 +49,8 @@ open class PasscodeLockPresenter {
     }
 
     @objc private func applicationDidBecomeActive() {
+      guard isPasscodePresented else { return }
+
       passcodeLockWindow.bounds = mainWindow!.bounds
       passcodeLockWindow.rootViewController?.view.bounds = passcodeLockWindow.bounds
       passcodeLockWindow.rootViewController?.view.frame = passcodeLockWindow.bounds
