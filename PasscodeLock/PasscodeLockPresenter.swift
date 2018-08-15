@@ -33,6 +33,8 @@ open class PasscodeLockPresenter {
         passcodeConfiguration = configuration
         
         passcodeLockVC = viewController
+
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
     }
 
     public convenience init(mainWindow window: UIWindow?, configuration: PasscodeLockConfigurationType) {
@@ -40,6 +42,16 @@ open class PasscodeLockPresenter {
         let passcodeLockVC = PasscodeLockViewController(state: .enterPasscode, configuration: configuration)
         
         self.init(mainWindow: window, configuration: configuration, viewController: passcodeLockVC)
+    }
+
+    deinit {
+      NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc private func applicationDidBecomeActive() {
+      passcodeLockWindow.bounds = mainWindow!.bounds
+      passcodeLockWindow.rootViewController?.view.bounds = passcodeLockWindow.bounds
+      passcodeLockWindow.rootViewController?.view.frame = passcodeLockWindow.bounds
     }
     
     open func presentPasscodeLock() {
