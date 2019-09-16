@@ -13,10 +13,12 @@ struct PasscodeLockConfiguration: PasscodeLockConfigurationType {
     
     let repository: PasscodeRepositoryType
     let passcodeLength = 4
-    var isTouchIDAllowed = true
+    var isBiometricAllowed = true
     let shouldRequestTouchIDImmediately = true
     let maximumInccorectPasscodeAttempts = -1
     
+    var onViewControllerLoad: ((PasscodeLockViewController) -> Void)?
+
     init(repository: PasscodeRepositoryType) {
         
         self.repository = repository

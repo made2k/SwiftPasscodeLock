@@ -13,7 +13,7 @@ class FakePasscodeState: PasscodeLockStateType {
     var title = "A"
     var description = "B"
     var isCancellableAction = true
-    var isTouchIDAllowed = true
+    var isBiometricAllowed = true
     
     var acceptPaccodeCalled = false
     var acceptedPasscode = [String]()

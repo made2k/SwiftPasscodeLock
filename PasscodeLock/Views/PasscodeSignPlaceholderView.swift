@@ -18,7 +18,7 @@ open class PasscodeSignPlaceholderView: UIView {
     }
     
     @IBInspectable
-    open var inactiveColor: UIColor = UIColor.white {
+    open var inactiveColor: UIColor = UIColor.clear {
         didSet {
             setupView()
         }
@@ -36,6 +36,11 @@ open class PasscodeSignPlaceholderView: UIView {
         didSet {
             setupView()
         }
+    }
+    
+    open override var tintColor: UIColor! {
+        get { return activeColor }
+        set { activeColor = newValue }
     }
     
     public override init(frame: CGRect) {

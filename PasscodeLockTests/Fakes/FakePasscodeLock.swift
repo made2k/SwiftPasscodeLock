@@ -14,7 +14,7 @@ class FakePasscodeLock: PasscodeLockType {
     let configuration: PasscodeLockConfigurationType
     var repository: PasscodeRepositoryType { return configuration.repository }
     var state: PasscodeLockStateType { return lockState }
-    let isTouchIDAllowed = false
+    let isBiometricAllowed = false
     var lockState: PasscodeLockStateType
     
     var changeStateCalled = false

@@ -30,6 +30,7 @@ open class PasscodeLockViewController: UIViewController, PasscodeLockTypeDelegat
     @IBOutlet open weak var titleLabel: UILabel?
     @IBOutlet open weak var descriptionLabel: UILabel?
     @IBOutlet open var placeholders: [PasscodeSignPlaceholderView] = [PasscodeSignPlaceholderView]()
+    @IBOutlet open var inputButtons: [UIButton]!
     @IBOutlet open weak var cancelButton: UIButton?
     @IBOutlet open weak var deleteSignButton: UIButton?
     @IBOutlet open weak var touchIDButton: UIButton?
@@ -62,10 +63,11 @@ open class PasscodeLockViewController: UIViewController, PasscodeLockTypeDelegat
         
         passcodeLock.delegate = self
         notificationCenter = NotificationCenter.default
+        
+        modalPresentationStyle = .fullScreen
     }
     
     public convenience init(state: LockState, configuration: PasscodeLockConfigurationType, animateOnDismiss: Bool = true) {
-        
         self.init(state: state.getState(), configuration: configuration, animateOnDismiss: animateOnDismiss)
     }
     
@@ -74,7 +76,6 @@ open class PasscodeLockViewController: UIViewController, PasscodeLockTypeDelegat
     }
     
     deinit {
-        
         clearEvents()
     }
     
@@ -87,6 +88,8 @@ open class PasscodeLockViewController: UIViewController, PasscodeLockTypeDelegat
         deleteSignButton?.isEnabled = false
         
         setupEvents()
+        
+        passcodeConfiguration.onViewControllerLoad?(self)
     }
     
     open override func viewDidAppear(_ animated: Bool) {
@@ -99,11 +102,12 @@ open class PasscodeLockViewController: UIViewController, PasscodeLockTypeDelegat
     }
     
     internal func updatePasscodeView() {
-        
         titleLabel?.text = passcodeLock.state.title
         descriptionLabel?.text = passcodeLock.state.description
         cancelButton?.isEnabled = passcodeLock.state.isCancellableAction
-        touchIDButton?.isHidden = !passcodeLock.isTouchIDAllowed
+        cancelButton?.alpha = passcodeLock.state.isCancellableAction ? 1 : 0
+        touchIDButton?.isHidden = !passcodeLock.isBiometricAllowed
+        touchIDButton?.setTitle(passcodeLock.biometricTitle, for: .normal)
     }
     
     // MARK: - Events
@@ -156,7 +160,7 @@ open class PasscodeLockViewController: UIViewController, PasscodeLockTypeDelegat
     
     fileprivate func authenticateWithBiometrics() {
         
-        if passcodeConfiguration.shouldRequestTouchIDImmediately && passcodeLock.isTouchIDAllowed {
+        if passcodeConfiguration.shouldRequestTouchIDImmediately && passcodeLock.isBiometricAllowed {
             
             passcodeLock.authenticateWithBiometrics()
         }

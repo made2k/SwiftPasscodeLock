@@ -20,12 +20,18 @@ open class PasscodeSignButton: UIButton {
             setupView()
         }
     }
-
+    
+    open override var tintColor: UIColor! {
+        get { return borderColor }
+        set {
+            borderColor = newValue
+            setTitleColor(newValue, for: .normal)
+        }
+    }
     
     @IBInspectable
     open var highlightBackgroundColor: UIColor = UIColor.clear {
         didSet {
-
             setupView()
         }
     }
@@ -69,8 +75,6 @@ open class PasscodeSignButton: UIButton {
         self.layer.cornerRadius = rect.width/2
     }
 
-
-    
     fileprivate func setupActions() {
         
         addTarget(self, action: #selector(PasscodeSignButton.handleTouchDown), for: .touchDown)

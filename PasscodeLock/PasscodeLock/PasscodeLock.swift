@@ -10,7 +10,7 @@ import Foundation
 import LocalAuthentication
 
 open class PasscodeLock: PasscodeLockType {
-    
+        
     open weak var delegate: PasscodeLockTypeDelegate?
     public let configuration: PasscodeLockConfigurationType
     
@@ -22,8 +22,19 @@ open class PasscodeLock: PasscodeLockType {
         return lockState
     }
     
-    open var isTouchIDAllowed: Bool {
-        return isTouchIDEnabled() && configuration.isTouchIDAllowed && lockState.isTouchIDAllowed
+    open var isBiometricAllowed: Bool {
+        return isTouchIDEnabled() && configuration.isBiometricAllowed && lockState.isBiometricAllowed
+    }
+    
+    public var biometricTitle: String {
+        switch LAContext.biometricType() {
+        case .faceID:
+            return "Use FaceID"
+        case .touchID:
+            return "Use TouchID"
+        default:
+            return ""
+        }
     }
     
     fileprivate var lockState: PasscodeLockStateType
@@ -67,7 +78,7 @@ open class PasscodeLock: PasscodeLockType {
     
     open func authenticateWithBiometrics() {
         
-        guard isTouchIDAllowed else { return }
+        guard isBiometricAllowed else { return }
         
         let context = LAContext()
         let reason = localizedStringFor("PasscodeLockTouchIDReason", comment: "TouchID authentication reason")
